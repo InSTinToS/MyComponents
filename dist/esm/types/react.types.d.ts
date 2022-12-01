@@ -1,0 +1,12 @@
+/// <reference types="node" />
+import { ButtonHTMLAttributes, DetailedHTMLProps, Dispatch, FormHTMLAttributes, InputHTMLAttributes, ReactNode, SVGAttributes, SetStateAction } from 'react';
+export type TSVGProps = SVGAttributes<SVGElement>;
+export type TFormProps = FormHTMLAttributes<HTMLFormElement>;
+export type TSetState<State> = Dispatch<SetStateAction<State>>;
+export type TInputProps = InputHTMLAttributes<HTMLInputElement>;
+export type TTimer = string | number | NodeJS.Timeout | undefined;
+export type TAnchorProps = ButtonHTMLAttributes<HTMLAnchorElement>;
+export type TButtonProps = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+export interface IChildrenProps {
+    children?: ReactNode;
+}
