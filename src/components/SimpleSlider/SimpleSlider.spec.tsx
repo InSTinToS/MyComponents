@@ -78,3 +78,7 @@ describe('SimpleSlider', () => {
     })
   })
 })
+
+describe('useSimpleSlider', () => {
+  it('', () => {})
+})

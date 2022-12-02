@@ -18,16 +18,31 @@ const variants = {
 const swipePower = (offset: number, velocity: number) =>
   Math.abs(offset) * velocity
 
-export const useSimpleSlider: TUseSimpleSlider = ({ items, startFrom }) => {
+export const useSimpleSlider: TUseSimpleSlider = ({
+  items,
+  draggable,
+  startFrom,
+  disableTimeout
+}) => {
   const swipeConfidenceThreshold = 10000
 
+  const [animating, setAnimating] = useState(false)
   const [[page, direction], setPage] = useState([
     startFrom === 'start' ? 0 : items.length - 1,
     0
   ])
 
   const paginate = (newDirection: number) => {
-    setPage([page + newDirection, newDirection])
+    const newPage = page + newDirection
+
+    if (newPage >= 0 && newPage <= items.length - 1) {
+      setPage([newPage, newDirection])
+
+      if (disableTimeout) {
+        setAnimating(true)
+        setTimeout(() => setAnimating(false), disableTimeout)
+      }
+    }
   }
 
   const onDragEnd: IUseSimpleSliderReturn['liMotionProps']['onDragEnd'] = (
@@ -42,9 +57,13 @@ export const useSimpleSlider: TUseSimpleSlider = ({ items, startFrom }) => {
 
   return {
     page,
-    leftButtonParams: { disabled: page === 0, paginate },
+    cursor: draggable || !paginate ? 'grab' : 'normal',
+    leftButtonParams: { disabled: page === 0 || animating, paginate },
     presenceMotionProps: { initial: false, custom: direction, mode: 'wait' },
-    rightButtonParams: { disabled: page === items.length - 1, paginate },
+    rightButtonParams: {
+      paginate,
+      disabled: page === items.length - 1 || animating
+    },
     liMotionProps: {
       variants,
       onDragEnd,
@@ -53,11 +72,9 @@ export const useSimpleSlider: TUseSimpleSlider = ({ items, startFrom }) => {
       initial: 'enter',
       custom: direction,
       animate: 'center',
+      drag: draggable ? 'x' : false,
       dragConstraints: { left: 0, right: 0 },
-      transition: {
-        opacity: { duration: 0.2 },
-        x: { type: 'spring', stiffness: 300, damping: 30 }
-      }
+      transition: { damping: 30, type: 'spring', stiffness: 300 }
     }
   }
 }

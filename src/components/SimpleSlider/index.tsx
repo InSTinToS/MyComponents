@@ -9,17 +9,19 @@ export const SimpleSlider = ({
   itemProps,
   leftButton,
   rightButton,
+  disableTimeout,
   draggable = false,
   startFrom = 'start',
   animatePresenceProps
 }: ISimpleSliderProps) => {
   const {
     page,
+    cursor,
     liMotionProps,
     leftButtonParams,
     rightButtonParams,
     presenceMotionProps
-  } = useSimpleSlider({ items, startFrom })
+  } = useSimpleSlider({ items, startFrom, draggable, disableTimeout })
 
   return (
     <>
@@ -31,8 +33,7 @@ export const SimpleSlider = ({
             index === page && (
               <motion.li
                 key={index}
-                drag={draggable ? 'x' : false}
-                style={{ cursor: draggable ? 'grab' : 'normal' }}
+                style={{ cursor, overflow: 'hidden' }}
                 {...liMotionProps}
                 {...itemProps}
               >

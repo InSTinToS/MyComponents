@@ -13,6 +13,7 @@ export interface ISliderButtonProps {
 export interface ISimpleSliderProps {
   items: ReactNode[]
   draggable?: boolean
+  disableTimeout?: number
   startFrom?: 'start' | 'end'
   itemProps?: HTMLMotionProps<'li'>
   animatePresenceProps?: AnimatePresenceProps
@@ -23,10 +24,13 @@ export interface ISimpleSliderProps {
 interface IUseSimpleSliderParams {
   items: ISimpleSliderProps['items']
   startFrom: ISimpleSliderProps['startFrom']
+  draggable: ISimpleSliderProps['draggable']
+  disableTimeout: ISimpleSliderProps['disableTimeout']
 }
 
 export interface IUseSimpleSliderReturn {
   page: number
+  cursor: 'grab' | 'normal'
   liMotionProps: MotionProps
   leftButtonParams: ISliderButtonProps
   rightButtonParams: ISliderButtonProps

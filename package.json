@@ -1,6 +1,6 @@
 {
   "license": "MIT",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "main": "dist/cjs/index.js",
   "name": "instintos-library",
   "module": "dist/esm/index.js",
@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "test": "clear && jest",
-    "publish": "npm run build && npm publish --access public",
+    "npm-publish": "yarn build && npm publish --access public",
     "build": "rm -rf dist/ && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc",
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs",
@@ -20,13 +20,13 @@
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.5.13",
-    "@storybook/addon-essentials": "^6.5.13",
+    "@storybook/addon-essentials": "^6.4.22",
     "@storybook/addon-interactions": "^6.5.13",
     "@storybook/addon-links": "^6.5.13",
     "@storybook/addon-postcss": "^2.0.0",
     "@storybook/builder-webpack4": "^6.5.13",
     "@storybook/manager-webpack4": "^6.5.13",
-    "@storybook/react": "^6.5.13",
+    "@storybook/react": "^6.1.21",
     "@storybook/testing-library": "^0.0.13",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
