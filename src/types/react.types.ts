@@ -3,6 +3,7 @@ import {
   DetailedHTMLProps,
   Dispatch,
   FormHTMLAttributes,
+  HTMLAttributes,
   InputHTMLAttributes,
   ReactNode,
   SVGAttributes,
@@ -15,6 +16,11 @@ export type TSetState<State> = Dispatch<SetStateAction<State>>
 export type TInputProps = InputHTMLAttributes<HTMLInputElement>
 export type TTimer = string | number | NodeJS.Timeout | undefined
 export type TAnchorProps = ButtonHTMLAttributes<HTMLAnchorElement>
+
+export type TDivProps = DetailedHTMLProps<
+  HTMLAttributes<HTMLDivElement>,
+  HTMLDivElement
+>
 
 export type TButtonProps = DetailedHTMLProps<
   ButtonHTMLAttributes<HTMLButtonElement>,

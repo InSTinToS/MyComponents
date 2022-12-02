@@ -1,2 +1,3 @@
-import SimpleSlider, { ISimpleSliderForward, ISimpleSliderProps } from '@src/components/SimpleSlider';
-export { SimpleSlider, ISimpleSliderForward, ISimpleSliderProps };
+import SimpleSlider from './components/SimpleSlider';
+export * from './components/SimpleSlider/types';
+export { SimpleSlider };

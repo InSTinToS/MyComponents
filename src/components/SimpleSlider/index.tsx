@@ -1,38 +1,13 @@
-import {
-  AnimatePresence,
-  AnimatePresenceProps,
-  HTMLMotionProps,
-  Variants,
-  motion
-} from 'framer-motion'
-import React, {
-  ReactNode,
-  forwardRef,
-  useImperativeHandle,
-  useState
-} from 'react'
+import useSimpleSlider from './logic'
+import { ISimpleSliderForward, ISimpleSliderProps } from './types'
 
-interface ISimpleSliderState {
-  index: number
-  direction: 'right' | 'left'
-}
+import { AnimatePresence, motion } from 'framer-motion'
+import React, { forwardRef } from 'react'
 
-export interface ISimpleSliderForward {
-  onLeftClick: () => void
-  onRightClick: () => void
-  getInfo: () => ISimpleSliderState & { showLeft: boolean; showRight: boolean }
-}
-
-export interface ISimpleSliderProps {
-  items: ReactNode[]
-  leftButton: ReactNode
-  rightButton: ReactNode
-  startFrom?: 'start' | 'end'
-  liProps?: HTMLMotionProps<'li'>
-  animatePresenceProps?: AnimatePresenceProps
-}
-
-const SimpleSlider = forwardRef<ISimpleSliderForward, ISimpleSliderProps>(
+export const SimpleSlider = forwardRef<
+  ISimpleSliderForward,
+  ISimpleSliderProps
+>(
   (
     {
       items,
@@ -44,53 +19,11 @@ const SimpleSlider = forwardRef<ISimpleSliderForward, ISimpleSliderProps>(
     },
     ref
   ) => {
-    const [{ index, direction }, setSlider] = useState<ISimpleSliderState>({
-      index: startFrom === 'start' ? 0 : items.length - 1,
-      direction: startFrom === 'start' ? 'left' : 'right'
-    })
-
-    const itemVariants: Variants = {
-      enter: { x: '0%', opacity: 1 },
-      exit: { x: direction === 'right' ? '-50%' : '50%', opacity: 0 },
-      initial: { x: direction === 'right' ? '-50%' : '50%', opacity: 0 }
-    }
-
-    const onRightClick = () => {
-      setSlider(prev => {
-        const newIndex = prev.index + 1
-
-        return {
-          direction: 'right',
-          index: newIndex <= items.length - 1 ? newIndex : prev.index
-        }
-      })
-    }
-
-    const onLeftClick = () => {
-      setSlider(prev => {
-        const newIndex = prev.index - 1
-
-        return {
-          direction: 'left',
-          index: newIndex >= 0 ? newIndex : prev.index
-        }
-      })
-    }
-
-    const getInfo = () => ({
-      index,
-      direction,
-      showLeft: index !== 0,
-      showRight: index !== items.length - 1
-    })
-
-    useImperativeHandle(ref, () => ({ onRightClick, onLeftClick, getInfo }), [
-      getInfo
-    ])
+    const { index, itemVariants } = useSimpleSlider({ ref, items, startFrom })
 
     return (
       <>
-        {index !== 0 && leftButton}
+        {leftButton(index === 0)}
 
         <AnimatePresence exitBeforeEnter={true} {...animatePresenceProps}>
           {items.map(
@@ -111,12 +44,9 @@ const SimpleSlider = forwardRef<ISimpleSliderForward, ISimpleSliderProps>(
           )}
         </AnimatePresence>
 
-        {index !== items.length - 1 && rightButton}
+        {rightButton(index === items.length - 1)}
       </>
     )
   }
 )
-
 SimpleSlider.displayName = 'SimpleSlider'
-
-export default SimpleSlider

@@ -1,8 +1,10 @@
-import SimpleSlider, { ISimpleSliderForward, ISimpleSliderProps } from './index'
+import { ISimpleSliderProps } from './types'
 
-import { TMeta, TStory } from '@src/types/storybook.types'
+import { SimpleSliderTemplate } from '../../templates/SimpleSlider'
+import { TMeta, TStory } from '../../types/storybook.types'
+import { SimpleSlider } from './index'
 
-import React, { useRef } from 'react'
+import React from 'react'
 
 const metadata: TMeta<typeof SimpleSlider> = {
   argTypes: {},
@@ -13,44 +15,9 @@ const metadata: TMeta<typeof SimpleSlider> = {
   }
 }
 
-const Template: TStory<typeof SimpleSlider> = (args: ISimpleSliderProps) => {
-  const simpleSliderRef = useRef<ISimpleSliderForward>(null)
-
-  const items = [
-    <li key='1' style={{ width: '100%' }}>
-      Page 1
-    </li>,
-    <li key='2' style={{ width: '100%' }}>
-      Page 2
-    </li>
-  ]
-
-  return (
-    <ul style={{}}>
-      <SimpleSlider
-        {...args}
-        items={items}
-        ref={simpleSliderRef}
-        leftButton={
-          <button
-            type='button'
-            onClick={() => simpleSliderRef.current?.onLeftClick()}
-          >
-            Left
-          </button>
-        }
-        rightButton={
-          <button
-            type='button'
-            onClick={() => simpleSliderRef.current?.onRightClick()}
-          >
-            Right
-          </button>
-        }
-      />
-    </ul>
-  )
-}
+const Template: TStory<typeof SimpleSlider> = (args: ISimpleSliderProps) => (
+  <SimpleSliderTemplate {...args} />
+)
 
 export const Default = Template.bind({})
 

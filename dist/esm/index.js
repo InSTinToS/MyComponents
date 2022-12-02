@@ -1,3 +1,4 @@
-import SimpleSlider from '@src/components/SimpleSlider';
+import SimpleSlider from './components/SimpleSlider';
+export * from './components/SimpleSlider/types';
 export { SimpleSlider };
 //# sourceMappingURL=index.js.map
