@@ -1,14 +1,14 @@
 {
-  "name": "instintos-library",
-  "version": "0.1.6",
+  "license": "MIT",
+  "version": "0.1.7",
   "main": "dist/cjs/index.js",
+  "name": "instintos-library",
   "module": "dist/esm/index.js",
+  "author": "Miguel Andrade Barreto",
+  "description": "Its a component library",
   "files": [
     "dist"
   ],
-  "description": "Its a component library",
-  "author": "Miguel Andrade Barreto",
-  "license": "MIT",
   "scripts": {
     "test": "clear && jest",
     "publish": "npm run build && npm publish --access public",
@@ -28,6 +28,7 @@
     "@storybook/manager-webpack4": "^6.5.13",
     "@storybook/react": "^6.5.13",
     "@storybook/testing-library": "^0.0.13",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/react-hooks": "^8.0.1",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",

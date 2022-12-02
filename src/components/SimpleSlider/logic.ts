@@ -1,73 +1,63 @@
-import { TSliderReducer, TUseSimpleSlider } from './types'
+import { IUseSimpleSliderReturn, TUseSimpleSlider } from './types'
 
-import { Variants } from 'framer-motion'
-import { useEffect, useImperativeHandle, useReducer } from 'react'
+import { useState } from 'react'
 
-const sliderReducer: TSliderReducer = (
-  state,
-  { type, maxLength, minLength = 0 }
-) => {
-  switch (type) {
-    case 'left': {
-      const newIndex = state.index - 1
-
-      return {
-        direction: 'left',
-        index: newIndex >= minLength ? newIndex : state.index
-      }
-    }
-
-    case 'right': {
-      const newIndex = state.index + 1
-
-      return {
-        direction: 'right',
-        index: newIndex <= maxLength ? newIndex : state.index
-      }
-    }
-
-    default: {
-      return state
-    }
-  }
+const variants = {
+  center: { x: 0, zIndex: 1, opacity: 1 },
+  enter: (direction: number) => ({
+    opacity: 0,
+    x: direction > 0 ? '100%' : '-100%'
+  }),
+  exit: (direction: number) => ({
+    zIndex: 0,
+    opacity: 0,
+    x: direction < 0 ? '100%' : '-100%'
+  })
 }
 
-const useSimpleSlider: TUseSimpleSlider = ({ ref, startFrom, items }) => {
-  const [{ index, direction }, dispatch] = useReducer(sliderReducer, {
-    index: startFrom === 'start' ? 0 : items.length - 1,
-    direction: startFrom === 'start' ? 'right' : 'left'
-  })
+const swipePower = (offset: number, velocity: number) =>
+  Math.abs(offset) * velocity
 
-  useEffect(() => {
-    console.log(index, direction)
-  }, [index, direction])
+export const useSimpleSlider: TUseSimpleSlider = ({ items, startFrom }) => {
+  const swipeConfidenceThreshold = 10000
 
-  const itemVariants: Variants = {
-    enter: { x: '0%', opacity: 1 },
-    exit: { x: direction === 'right' ? '-100%' : '100%', opacity: 0 },
-    initial: { x: direction !== 'right' ? '-100%' : '100%', opacity: 0 }
-  }
-
-  const onRightClick = () => {
-    dispatch({ type: 'right', maxLength: items.length })
-  }
-
-  const onLeftClick = () => {
-    dispatch({ type: 'left', maxLength: items.length })
-  }
-
-  const getInfo = () => ({
-    index,
-    direction,
-    showLeft: index !== 0,
-    showRight: index !== items.length - 1
-  })
-
-  useImperativeHandle(ref, () => ({ onRightClick, onLeftClick, getInfo }), [
-    getInfo
+  const [[page, direction], setPage] = useState([
+    startFrom === 'start' ? 0 : items.length - 1,
+    0
   ])
 
-  return { itemVariants, index }
-}
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection])
+  }
 
-export default useSimpleSlider
+  const onDragEnd: IUseSimpleSliderReturn['liMotionProps']['onDragEnd'] = (
+    _e,
+    { offset, velocity }
+  ) => {
+    const swipe = swipePower(offset.x, velocity.x)
+
+    if (swipe < -swipeConfidenceThreshold) paginate(1)
+    else if (swipe > swipeConfidenceThreshold) paginate(-1)
+  }
+
+  return {
+    page,
+    leftButtonParams: { disabled: page === 0, paginate },
+    presenceMotionProps: { initial: false, custom: direction, mode: 'wait' },
+    rightButtonParams: { disabled: page === items.length - 1, paginate },
+    liMotionProps: {
+      variants,
+      onDragEnd,
+      exit: 'exit',
+      dragElastic: 1,
+      initial: 'enter',
+      custom: direction,
+      animate: 'center',
+      dragConstraints: { left: 0, right: 0 },
+      transition: {
+        opacity: { duration: 0.2 },
+        x: { type: 'spring', stiffness: 300, damping: 30 }
+      }
+    }
+  }
+}

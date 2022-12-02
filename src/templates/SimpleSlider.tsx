@@ -1,9 +1,8 @@
 import { SimpleSlider } from '../components/SimpleSlider'
-import { ISimpleSliderForward } from '../components/SimpleSlider/types'
 import '../tailwind.css'
 import { TButtonProps, TDivProps } from '../types/react.types'
 
-import React, { useRef } from 'react'
+import React from 'react'
 
 export const SliderItem = ({ children, ...props }: TDivProps) => (
   <div
@@ -24,41 +23,30 @@ export const SliderButton = ({ children, ...props }: TButtonProps) => (
   </button>
 )
 
-export const SimpleSliderTemplate = ({ ...args }) => {
-  const simpleSliderRef = useRef<ISimpleSliderForward>(null)
+const items = [
+  <SliderItem key='1'>Page 1</SliderItem>,
+  <SliderItem key='2'>Page 2</SliderItem>,
+  <SliderItem key='3'>Page 3</SliderItem>,
+  <SliderItem key='4'>Page 4</SliderItem>,
+  <SliderItem key='5'>Page 5</SliderItem>,
+  <SliderItem key='6'>Page 6</SliderItem>
+]
 
-  const items = [
-    <SliderItem key='1'>Page 1</SliderItem>,
-    <SliderItem key='2'>Page 2</SliderItem>,
-    <SliderItem key='3'>Page 3</SliderItem>,
-    <SliderItem key='4'>Page 4</SliderItem>,
-    <SliderItem key='5'>Page 5</SliderItem>,
-    <SliderItem key='6'>Page 6</SliderItem>
-  ]
-
-  return (
-    <ul className='flex items-center'>
-      <SimpleSlider
-        {...args}
-        items={items}
-        ref={simpleSliderRef}
-        leftButton={disabled => (
-          <SliderButton
-            onClick={() => simpleSliderRef.current?.onLeftClick()}
-            disabled={disabled}
-          >
-            Left
-          </SliderButton>
-        )}
-        rightButton={disabled => (
-          <SliderButton
-            onClick={() => simpleSliderRef.current?.onRightClick()}
-            disabled={disabled}
-          >
-            Right
-          </SliderButton>
-        )}
-      />
-    </ul>
-  )
-}
+export const SimpleSliderTemplate = ({ ...args }) => (
+  <ul className='flex items-center'>
+    <SimpleSlider
+      items={items}
+      leftButton={({ disabled, paginate }) => (
+        <SliderButton onClick={() => paginate(-1)} disabled={disabled}>
+          Left
+        </SliderButton>
+      )}
+      rightButton={({ disabled, paginate }) => (
+        <SliderButton onClick={() => paginate(1)} disabled={disabled}>
+          Right
+        </SliderButton>
+      )}
+      {...args}
+    />
+  </ul>
+)

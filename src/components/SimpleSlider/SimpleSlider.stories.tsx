@@ -21,6 +21,6 @@ const Template: TStory<typeof SimpleSlider> = (args: ISimpleSliderProps) => (
 
 export const Default = Template.bind({})
 
-Default.args = {} as ISimpleSliderProps
-
 export default metadata
+
+Default.args = {} as ISimpleSliderProps

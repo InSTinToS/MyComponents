@@ -1,52 +1,48 @@
-import useSimpleSlider from './logic'
-import { ISimpleSliderForward, ISimpleSliderProps } from './types'
+import { useSimpleSlider } from './logic'
+import { ISimpleSliderProps } from './types'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import React, { forwardRef } from 'react'
+import React from 'react'
 
-export const SimpleSlider = forwardRef<
-  ISimpleSliderForward,
-  ISimpleSliderProps
->(
-  (
-    {
-      items,
-      liProps,
-      leftButton,
-      rightButton,
-      startFrom = 'start',
-      animatePresenceProps
-    },
-    ref
-  ) => {
-    const { index, itemVariants } = useSimpleSlider({ ref, items, startFrom })
+export const SimpleSlider = ({
+  items,
+  itemProps,
+  leftButton,
+  rightButton,
+  draggable = false,
+  startFrom = 'start',
+  animatePresenceProps
+}: ISimpleSliderProps) => {
+  const {
+    page,
+    liMotionProps,
+    leftButtonParams,
+    rightButtonParams,
+    presenceMotionProps
+  } = useSimpleSlider({ items, startFrom })
 
-    return (
-      <>
-        {leftButton(index === 0)}
+  return (
+    <>
+      {leftButton(leftButtonParams)}
 
-        <AnimatePresence exitBeforeEnter={true} {...animatePresenceProps}>
-          {items.map(
-            (item, itemIndex) =>
-              itemIndex === index && (
-                <motion.li
-                  exit='exit'
-                  animate='enter'
-                  key={itemIndex}
-                  initial='initial'
-                  variants={itemVariants}
-                  transition={{ type: 'tween', duration: 0.5 }}
-                  {...liProps}
-                >
-                  {item}
-                </motion.li>
-              )
-          )}
-        </AnimatePresence>
+      <AnimatePresence {...presenceMotionProps} {...animatePresenceProps}>
+        {items.map(
+          (item, index) =>
+            index === page && (
+              <motion.li
+                key={index}
+                drag={draggable ? 'x' : false}
+                style={{ cursor: draggable ? 'grab' : 'normal' }}
+                {...liMotionProps}
+                {...itemProps}
+              >
+                {item}
+              </motion.li>
+            )
+        )}
+      </AnimatePresence>
 
-        {rightButton(index === items.length - 1)}
-      </>
-    )
-  }
-)
-SimpleSlider.displayName = 'SimpleSlider'
+      {rightButton(rightButtonParams)}
+    </>
+  )
+}
