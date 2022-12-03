@@ -7,11 +7,11 @@ import React from 'react'
 export const SimpleSlider = ({
   items,
   itemProps,
+  draggable,
+  startFrom,
   leftButton,
   rightButton,
   disableTimeout,
-  draggable = false,
-  startFrom = 'start',
   animatePresenceProps
 }: ISimpleSliderProps) => {
   const {

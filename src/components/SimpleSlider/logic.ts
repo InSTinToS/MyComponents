@@ -3,13 +3,12 @@ import { IUseSimpleSliderReturn, TUseSimpleSlider } from './types'
 import { useState } from 'react'
 
 const variants = {
-  center: { x: 0, zIndex: 1, opacity: 1 },
+  center: { x: 0, opacity: 1 },
   enter: (direction: number) => ({
     opacity: 0,
     x: direction > 0 ? '100%' : '-100%'
   }),
   exit: (direction: number) => ({
-    zIndex: 0,
     opacity: 0,
     x: direction < 0 ? '100%' : '-100%'
   })
@@ -20,17 +19,17 @@ const swipePower = (offset: number, velocity: number) =>
 
 export const useSimpleSlider: TUseSimpleSlider = ({
   items,
-  draggable,
-  startFrom,
-  disableTimeout
+  disableTimeout,
+  draggable = false,
+  startFrom = 'start'
 }) => {
-  const swipeConfidenceThreshold = 10000
-
   const [animating, setAnimating] = useState(false)
   const [[page, direction], setPage] = useState([
     startFrom === 'start' ? 0 : items.length - 1,
     0
   ])
+
+  const swipeConfidenceThreshold = 10000
 
   const paginate = (newDirection: number) => {
     const newPage = page + newDirection

@@ -23,9 +23,9 @@ export interface ISimpleSliderProps {
 
 interface IUseSimpleSliderParams {
   items: ISimpleSliderProps['items']
-  startFrom: ISimpleSliderProps['startFrom']
-  draggable: ISimpleSliderProps['draggable']
-  disableTimeout: ISimpleSliderProps['disableTimeout']
+  startFrom?: ISimpleSliderProps['startFrom']
+  draggable?: ISimpleSliderProps['draggable']
+  disableTimeout?: ISimpleSliderProps['disableTimeout']
 }
 
 export interface IUseSimpleSliderReturn {
