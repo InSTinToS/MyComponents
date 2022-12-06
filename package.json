@@ -1,10 +1,10 @@
 {
   "license": "MIT",
-  "version": "0.1.22",
+  "version": "0.1.25",
   "types": "dist/index.d.ts",
   "name": "instintos-library",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/esm/index.js",
+  "module": "dist/cjs/index.js",
   "author": "Miguel Andrade Barreto",
   "description": "My simple component library",
   "type": "module",
